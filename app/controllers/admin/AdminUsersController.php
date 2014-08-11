@@ -52,6 +52,21 @@ class AdminUsersController extends AdminController {
         return View::make('admin/users/index', compact('users', 'title'));
     }
 
+    public function getAdmins(){
+        // Title
+        $title = "Admins";
+
+        // Grab all the users
+        $users = User::all();
+        $users = $users->filter(function($user){
+            return $user->isAdmin();
+        });
+
+        // Show the page
+        return View::make('admin/admins')->with('title', $title)->with('users', $users);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

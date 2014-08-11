@@ -2029,16 +2029,16 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-ide-helper",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "a9dae91e4d82a4f7312f6b732baf8a5aa82fc73e"
+                "reference": "b80db2cebf97c9fd8232c504e505c3ccaf65a95f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/a9dae91e4d82a4f7312f6b732baf8a5aa82fc73e",
-                "reference": "a9dae91e4d82a4f7312f6b732baf8a5aa82fc73e",
+                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/b80db2cebf97c9fd8232c504e505c3ccaf65a95f",
+                "reference": "b80db2cebf97c9fd8232c504e505c3ccaf65a95f",
                 "shasum": ""
             },
             "require": {
@@ -2058,12 +2058,12 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.x-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Barryvdh\\LaravelIdeHelper": "src/"
+                "psr-4": {
+                    "Barryvdh\\LaravelIdeHelper\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2080,13 +2080,15 @@
             "keywords": [
                 "autocomplete",
                 "codeintel",
+                "helper",
+                "ide",
                 "laravel",
                 "netbeans",
                 "phpdoc",
                 "phpstorm",
                 "sublime"
             ],
-            "time": "2014-06-29 14:07:17"
+            "time": "2014-08-09 21:03:31"
         },
         {
             "name": "mockery/mockery",

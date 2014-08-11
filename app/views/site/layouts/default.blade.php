@@ -62,18 +62,11 @@
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
 						<li {{ (Request::is('/') ? ' class="active"' : '') }}><a href="{{{ URL::to('') }}}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-						@if (Auth::check())
-                        @if (Auth::user()->hasRole('admin'))
-                        <li{{ (Request::is('admin/clients*') ? ' class="active"' : '') }}><a href="{{{ URL::to('admin/clients') }}}"><span class="glyphicon glyphicon-list-alt"></span> Apps</a></li>
-    					<li{{ (Request::is('admin/users*') ? ' class="active"' : '') }}><a href="{{{ URL::to('admin/users') }}}"><span class="glyphicon glyphicon-user"></span> Users</a></li>
-    					<li{{ (Request::is('admin/roles*') ? ' class="active"' : '') }}><a href="{{{ URL::to('admin/roles') }}}"><span class="glyphicon glyphicon-user"></span> Roles</a></li>
-                        @endif
-                        @endif
 					</ul>
 
                     <ul class="nav navbar-nav pull-right">
                         @if (Auth::check())
-                        <li><a href="{{{ URL::to('user') }}}">Hello {{{ Auth::user()->first_name }}}</a></li>
+                        <li><a href="{{{ URL::to('user') }}}">Hello @if(Cache::has(Auth::user()->id)) {{json_decode(Cache::get(Auth::user()->id))->given_name}} @else Not Available @endif</a></li>
                         <li><a href="{{{ URL::to('user/logout') }}}">Logout</a></li>
                         @else
                         <li {{ (Request::is('user/login') ? ' class="active"' : '') }}><a href="{{{ URL::to('user/login') }}}">Login</a></li>
@@ -104,12 +97,7 @@
 		<!-- ./wrap -->
 
 
-	    <div id="footer">
-	      <div class="container">
-	        <p class="muted credit">&copy; Copyright Nellcorp 2014</p>
-	      </div>
-	    </div>
-
+	    
 		<!-- Javascripts
 		================================================== -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

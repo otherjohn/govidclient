@@ -27,7 +27,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface{
                if(empty($data)){
                     throw new Exception("Unable to retrieve user info");
                }
-               Cache::put($this->id,json_encode($data), 1440); //Cache user data for 24 hours
+               Cache::put($this->id,json_encode($data), Config::get('app.user_cache')); //Cache user data for 24 hours
                return $data;
             }
 
@@ -37,6 +37,18 @@ class User extends Eloquent implements UserInterface, RemindableInterface{
         
     }
 
+
+    public function isDoctor(){
+        return $this->hasRole('doctor');
+    }
+
+    public function isAdmin(){
+        return $this->hasRole('admin');
+    }
+
+    public function isPatient(){
+        return $this->hasRole('patient');
+    }
 
     public function data(){
         return $this->hasMany('UserData', 'user_id','id');

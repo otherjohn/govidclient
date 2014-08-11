@@ -29,7 +29,24 @@ class UserController extends BaseController {
         if($redirect){return $redirect;}
 
         // Show the page
-        return View::make('site/user/index', compact('user'));
+        $users = User::all();
+            
+        $doctors = $users->filter(function($user){return $user->isDoctor();});
+
+        $patients = $users->filter(function($user){return $user->isPatient();});
+
+        $admins = $users->filter(function($user){return $user->isAdmin();});
+
+        if(Auth::user()->isAdmin()){
+            return View::make('site/user/admin', compact('user'))->with('admins', $admins)->with('doctors', $doctors)->with('patients', $patients);
+        }
+        
+        if(Auth::user()->isDoctor()){
+            return View::make('site/user/doctor', compact('user'))->with('users', $patients);
+        }
+        
+            return View::make('site/user/index', compact('user'))->with('users', $doctors);
+        
     }
 
 
@@ -68,12 +85,12 @@ class UserController extends BaseController {
         }
         
         //See if user already exists
-        $password = Hash::make($data['sub']);
-        $user = User::where('pid',$password)->first();
+        $user = User::where('sub',$data['sub'])->first();
         
         if(empty($user)){
             $user = new User();
-            $user->pid = $password;
+            $user->pid = Hash::make($data['sub']);
+            $user->sub = $data['sub'];
         }
 
             $user->access_token = $client->getAccessToken();
@@ -82,17 +99,17 @@ class UserController extends BaseController {
             //dd($user->id);
         if ( $user->id ){
 
-            Cache::put($user->id,json_encode($data), 1440); //Cache user data for 24 hours
+            Cache::put($user->id,json_encode($data), Config::get('app.user_cache')); //Cache user data for 24 hours
             
             //Attach Roles to user
 
             $user->saveRoles(array($data['role']));
-            //dd('here');
             //login user
             if (Auth::attempt(array('id' => $user->id, 'password' => $data['sub']))){
-
                 //redirect user to their profile
-                return Redirect::to('/user');
+                return Redirect::to('/user');    
+                
+                
             }
             //Auth::login($user);
             
@@ -210,27 +227,34 @@ class UserController extends BaseController {
      * @param $username
      * @return mixed
      */
-    public function getProfile($username)
-    {
-        $userModel = new User;
-        $user = $userModel->getUserByUsername($username);
-
+    public function getShow($user){
         // Check if the user exists
-        if (is_null($user))
-        {
-            return App::abort(404);
+        if (is_null($user)){
+          return App::abort(404);
         }
 
-        return View::make('site/user/profile', compact('user'));
+        return View::make('site/user/profile')->with('user', $user);
     }
 
-    public function getSettings()
-    {
-        list($user,$redirect) = User::checkAuthAndRedirect('user/settings');
-        if($redirect){return $redirect;}
 
-        return View::make('site/user/profile', compact('user'));
+    public function showPatient($user){
+        // Check if the user exists
+        if (is_null($user) or !($user->hasRole('patient'))){
+          return App::abort(404);
+        }
+
+        return View::make('site/user/patientprofile')->with('user', $user);
     }
+
+    public function showDoctor($user){
+        // Check if the user exists
+        if (is_null($user) or !($user->hasRole('doctor'))){
+          return App::abort(404);
+        }
+
+        return View::make('site/user/doctorprofile')->with('user', $user);
+    }
+
 
     /**
      * Process a dumb redirect.
