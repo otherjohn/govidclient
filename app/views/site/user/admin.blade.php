@@ -52,8 +52,8 @@ body {
                   <tbody id="items">
                     @foreach($doctors as $user)
                     <tr>
-                      <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->name}} @else Not Available @endif</td>
-                      <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->email}} @else Not Available @endif</td>
+                      <td>@if(Cache::has($user->id)) <a href="/doctor/{{$user->id}}">{{json_decode(Cache::get($user->id))->name}}</a> @else Not Available @endif</td>
+                      <td>@if(Cache::has($user->id)) <a href="mailto:{{json_decode(Cache::get($user->id))->email}}">{{json_decode(Cache::get($user->id))->email}}</a> @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->phone}} @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->address}} @else Not Available @endif</td>
                     </tr>
@@ -76,7 +76,7 @@ body {
                     @foreach($patients as $user)
                     <tr>      
                       <td>@if(Cache::has($user->id)) <a href="/patient/{{$user->id}}">{{json_decode(Cache::get($user->id))->name}}</a> @else Not Available @endif</td>
-                      <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->email}} @else Not Available @endif</td>
+                      <td>@if(Cache::has($user->id)) <a href="mailto:{{json_decode(Cache::get($user->id))->email}}">{{json_decode(Cache::get($user->id))->email}}</a> @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->phone}} @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->address}} @else Not Available @endif</td>
                     </tr>
@@ -98,8 +98,8 @@ body {
                   <tbody id="items">
                     @foreach($admins as $user)
                     <tr>
-                      <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->name}} @else Not Available @endif</td>
-                      <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->email}} @else Not Available @endif</td>
+                      <td>@if(Cache::has($user->id)) <a href="/user/{{$user->id}}">{{json_decode(Cache::get($user->id))->name}}</a> @else Not Available @endif</td>
+                      <td>@if(Cache::has($user->id)) <a href="mailto:{{json_decode(Cache::get($user->id))->email}}">{{json_decode(Cache::get($user->id))->email}}</a> @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->phone}} @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->address}} @else Not Available @endif</td>
                     </tr>

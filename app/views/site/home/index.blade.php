@@ -10,7 +10,7 @@
 
         <p>This App requires that you be registered at <a href="http://gov.nellcorp.com" target="_blank">http://gov.nellcorp.com</a><br/><br/>
         When you click on the login button below, you will be redirected there to authorize this app to access your information.<br/><br/>
-        After your aproval, we will have access to your data for 24 hours, after which, you'll need to login again.
+        After your aproval, we will have access to your data for a limited time, after which, you'll need to login again.
         </p>
         <p>
           <a class="btn btn-lg btn-primary" href="{{{ URL::to('user/login') }}}" role="button">Login &raquo;</a>

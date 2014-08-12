@@ -8,23 +8,31 @@
 
 {{-- Content --}}
 @section('content')
+
+@if(Cache::has($user->id))
 <div class="page-header">
 	<h1>User Profile</h1>
 </div>
+
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>#</th>
-        <th>Username</th>
-        <th>Signed Up</th>
+        <th>Attribute</th>
+        <th>Value</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>{{{$user->id}}}</td>
-        <td>{{{$user->username}}}</td>
-        <td>{{{$user->joined()}}}</td>
-    </tr>
+    @foreach(json_decode(Cache::get($user->id),true) as $name => $value)
+        <tr>      
+            <td>{{$name}}</td>
+            <td>{{$value}}</td>
+        </tr>
+    @endforeach
     </tbody>
 </table>
+@else
+<div class="page-header">
+    <h1>No Data Available</h1>
+</div>
+@endif
 @stop

@@ -1,32 +1,27 @@
 <?php
 
-/** ------------------------------------------
- *  Route model binding
- *  ------------------------------------------
- */
 Route::model('user', 'User');
-
-/** ------------------------------------------
- *  Route constraint patterns
- *  ------------------------------------------
- */
 Route::pattern('user', '[0-9]+');
-//Route::pattern('token', '[0-9a-z]+');
 
-/** ------------------------------------------
- *  Frontend Routes
- *  ------------------------------------------
- */
+Route::group(array('prefix' => 'user', 'before' => 'auth'), function(){
+	Route::get('/{user}', 'UserController@getShow');
+	Route::controller('/', 'UserController');
+});
 
-Route::get('user/login', 'UserController@getLogin');
-Route::get('user/{user}', 'UserController@getShow');
-Route::controller('user', 'UserController');
+Route::group(array('prefix' => 'doctor', 'before' => 'auth'), function(){
+	Route::get('/{user}', 'UserController@showDoctor');
+});
 
-Route::get('doctor/{user}', 'UserController@showDoctor');
+Route::group(array('prefix' => 'patient', 'before' => 'auth'), function(){
+	Route::get('/{user}', 'UserController@showPatient');
+	Route::get('/{user}/edit', 'UserController@getEdit');
+	Route::post('/{user}/edit', 'UserController@postEdit');
+});
 
-Route::get('patient/{user}', 'UserController@showPatient');
-Route::get('patient/{user}/edit', 'UserController@getEdit');
-Route::post('patient/{user}/edit', 'UserController@postEdit');
+Route::group(array('prefix' => 'login', 'before' => 'guest'), function(){
+	Route::get('/', 'UserController@getLogin');
+});
 
-# Index Page - Last route, no matches
+Route::get('/logout', 'UserController@getLogout');
+
 Route::get('/', function(){return View::make('site/home/index');});

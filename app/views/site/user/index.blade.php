@@ -44,8 +44,8 @@ body {
                   <tbody id="items">
                     @foreach($users as $user)
                     <tr>
-                      <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->name}} @else Not Available @endif</td>
-                      <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->email}} @else Not Available @endif</td>
+                      <td>@if(Cache::has($user->id)) <a href="/doctor/{{$user->id}}">{{json_decode(Cache::get($user->id))->name}}</a> @else Not Available @endif</td>
+                      <td>@if(Cache::has($user->id)) <a href="mailto:{{json_decode(Cache::get($user->id))->email}}">{{json_decode(Cache::get($user->id))->email}}</a> @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->phone}} @else Not Available @endif</td>
                       <td>@if(Cache::has($user->id)) {{json_decode(Cache::get($user->id))->address}} @else Not Available @endif</td>
                     </tr>

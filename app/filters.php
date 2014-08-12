@@ -37,7 +37,14 @@ Route::filter('auth', function()
 {
 	if ( Auth::guest() ) // If the user is not logged in
 	{
-        	return Redirect::guest('user/login');
+        	return Redirect::guest('login');
+	}
+
+	if(!Cache::has(Auth::user()->id)){
+			
+		if(!Auth::user()->cache()){
+			return Redirect::guest('logout');
+		}
 	}
 });
 
@@ -59,25 +66,10 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Auth::check()) return Redirect::to('user/login/');
+	if (Auth::check()){
+			return Redirect::to('user');
+	}
 });
-
-/*
-|--------------------------------------------------------------------------
-| Role Permissions
-|--------------------------------------------------------------------------
-|
-| Access filters based on roles.
-|
-*/
-
-// Check for role on all admin routes
-Entrust::routeNeedsRole( 'admin*', array('admin'), Redirect::to('/') );
-
-// Check for permissions on admin actions
-Entrust::routeNeedsPermission( 'admin/clients*', 'manage_apps', Redirect::to('/admin') );
-Entrust::routeNeedsPermission( 'admin/users*', 'manage_users', Redirect::to('/admin') );
-Entrust::routeNeedsPermission( 'admin/roles*', 'manage_roles', Redirect::to('/admin') );
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +89,7 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
 
 /*
 |--------------------------------------------------------------------------

@@ -13,27 +13,19 @@ class User extends Eloquent implements UserInterface, RemindableInterface{
         /**
          * Validation rules
          */
-    public function info()
-    {
+    public function cache(){
         
-        if(Cache::has($this->id)){
-            return Cache::get($this->id);
-        }else{
-            if(!empty($this->access_token)){
-                //get results from server
-               $client = new Client(Config::get('app.provider'), Config::get('app.client_id'), Config::get('app.client_secret'), Config::get('app.url'));
-               $client->setAccessToken($this->access_token);
-               $data = $client->requestUserInfo();
-               if(empty($data)){
-                    throw new Exception("Unable to retrieve user info");
-               }
-               Cache::put($this->id,json_encode($data), Config::get('app.user_cache')); //Cache user data for 24 hours
-               return $data;
-            }
+        if(Cache::has($this->id)){return true;}
+        if(empty($this->access_token)){return false;}
 
-            return false;
-        }
-
+        $client = new Client(Config::get('app.provider'), Config::get('app.client_id'), Config::get('app.client_secret'), Config::get('app.url'));
+        $client->setAccessToken($this->access_token);
+        $data = $client->requestUserInfo();
+               
+        if(empty($data)){return false;}
+        
+        Cache::put($this->id,json_encode($data), Config::get('app.user_cache'));
+        return true;
         
     }
 

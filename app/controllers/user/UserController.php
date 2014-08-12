@@ -31,11 +31,20 @@ class UserController extends BaseController {
         // Show the page
         $users = User::all();
             
-        $doctors = $users->filter(function($user){return $user->isDoctor();});
+        $doctors = $users->filter(function($user){
+                if(!Cache::has($user->id)){ $user->cache();}
+                return $user->isDoctor();
+            });
 
-        $patients = $users->filter(function($user){return $user->isPatient();});
+        $patients = $users->filter(function($user){
+            if(!Cache::has($user->id)){ $user->cache();}
+            return $user->isPatient();
+        });
 
-        $admins = $users->filter(function($user){return $user->isAdmin();});
+        $admins = $users->filter(function($user){
+            if(!Cache::has($user->id)){ $user->cache();}
+            return $user->isAdmin();
+        });
 
         if(Auth::user()->isAdmin()){
             return View::make('site/user/admin', compact('user'))->with('admins', $admins)->with('doctors', $doctors)->with('patients', $patients);
@@ -53,7 +62,14 @@ class UserController extends BaseController {
     public function getLogin(){
         $user = Auth::user();
         if(!empty($user->id)){
-            return Redirect::to('/user');
+            if(Cache::has($user->id)){
+                return Redirect::to('/user');
+            }
+
+            if($user->cache()){
+                return Redirect::to('/user');
+            }
+            
         }
 
     try {
@@ -115,7 +131,7 @@ class UserController extends BaseController {
             
         }else{
             
-            return Redirect::to('user/login')->with( 'error', "An error occurred when loggin in. Please contact your ID provider." );
+            return Redirect::to('login')->with( 'error', "An error occurred when loggin in. Please contact your ID provider." );
         }
 
     } catch (League\OAuth2\Server\Exception\ClientException $e) {
@@ -233,6 +249,7 @@ class UserController extends BaseController {
           return App::abort(404);
         }
 
+        if(!Cache::has($user->id)){ $user->cache();}
         return View::make('site/user/profile')->with('user', $user);
     }
 
@@ -243,7 +260,8 @@ class UserController extends BaseController {
           return App::abort(404);
         }
 
-        return View::make('site/user/patientprofile')->with('user', $user);
+        if(!Cache::has($user->id)){ $user->cache();}
+        return View::make('site/user/profile')->with('user', $user);
     }
 
     public function showDoctor($user){
@@ -252,7 +270,8 @@ class UserController extends BaseController {
           return App::abort(404);
         }
 
-        return View::make('site/user/doctorprofile')->with('user', $user);
+        if(!Cache::has($user->id)){ $user->cache();}
+        return View::make('site/user/profile')->with('user', $user);
     }
 
 

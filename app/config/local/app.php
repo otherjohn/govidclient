@@ -30,7 +30,8 @@ return array(
 	'provider' => 'http://gov.nellcorp.com',
 	'client_id' => 'nqcXKxMpMxg29R9zYcExaFTAHhiBZK2Db9PXZ96Y',
 	'client_secret' => '1TdcYRZgaogcvgWI8Fle2FhYezqvHun3G6i2ogul',
-	'user_cache' => 1440,
+	//'user_cache' => 1440,
+	'user_cache' => 1,
 
 	/*
 	|--------------------------------------------------------------------------
